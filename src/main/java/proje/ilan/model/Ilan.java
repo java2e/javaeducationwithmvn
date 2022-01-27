@@ -10,6 +10,21 @@ Coklu kalıtım c++
 public class Ilan extends BaseModel {
 
 
+    public Ilan()
+    {
+
+    }
+
+    public Ilan(Long id,String baslik,String detay,Kategori kategori,Kullanici kullanici){
+
+        setId(id);
+        this.baslik = baslik;
+        this.detay = detay;
+        this.kategori = kategori;
+        this.kullanici = kullanici;
+
+    }
+
     private String  baslik;
 
     private String detay;

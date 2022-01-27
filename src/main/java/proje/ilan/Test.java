@@ -95,6 +95,8 @@ public class Test {
         IlanService ilanService = new IlanService();
         ilanService.ekle(ilan1);
 
+        ilanService.getList();
+
         System.out.println("<----- Süreç Değişimi ----->");
 
         IlanSurecService ilanSurecService = new IlanSurecService();

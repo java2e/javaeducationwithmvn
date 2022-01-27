@@ -23,18 +23,8 @@ public class KullaniciService extends Service<Kullanici> implements BaseService<
 
             ResultSet sonucListesi = statement.executeQuery();
 
-            while (sonucListesi.next()){
+            kullaniciList = convertToKullanici(sonucListesi);
 
-                long id = sonucListesi.getLong("id");
-                String adi = sonucListesi.getString("adi");
-                String soyadi = sonucListesi.getString("soyadi");
-                String adres= sonucListesi.getString("adres");
-
-
-                Kullanici kullanici = new Kullanici(id,adi,soyadi,adres);
-                kullaniciList.add(kullanici);
-
-            }
 
         }
         catch (Exception ex){
@@ -52,6 +42,34 @@ public class KullaniciService extends Service<Kullanici> implements BaseService<
         if(parametreler.length>0)
             System.out.println(parametreler[0]);
 
+
+    }
+
+    public List<Kullanici> convertToKullanici(ResultSet resultSet)
+    {
+
+        List<Kullanici> liste = new ArrayList<>();
+
+        try {
+
+            while (resultSet.next()) {
+
+                long id = resultSet.getLong("id");
+                String adi = resultSet.getString("adi");
+                String soyadi = resultSet.getString("soyadi");
+                String adres = resultSet.getString("adres");
+
+
+                Kullanici kullanici = new Kullanici(id, adi, soyadi, adres);
+                liste.add(kullanici);
+
+            }
+        }
+        catch (Exception ex){
+            System.out.println("Hata => "+ex.getMessage());
+        }
+
+        return liste;
 
     }
 }

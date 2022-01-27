@@ -21,7 +21,7 @@ public abstract class Service<T> extends DBUtil{
             if (DBUtil.ILAN_LISTESI == null)
                 DBUtil.ILAN_LISTESI = new ArrayList<>();
 
-            DBUtil.ILAN_LISTESI.add(ilan);
+            DBUtil.ILAN_LISTESI.add(ilan); // DB BAGLAYACAZ!
 
             if(ilanSurecService == null)
                 ilanSurecService = new IlanSurecService();
