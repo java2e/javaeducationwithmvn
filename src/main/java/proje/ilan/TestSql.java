@@ -38,6 +38,10 @@ public class TestSql {
 
 
 
+        kullaniciService.sil(kullaniciList.get(0));
+
+
+
 
 
 

@@ -88,27 +88,26 @@ public abstract class Service<T> extends DBUtil{
                 throw new Exception("Model nesnesi null!");
 
             if (t instanceof Ilan) {
-
-
                 Ilan ilan = (Ilan) t;
+                /*
+                İlan Surec içerisinde var ise onu silmeniz gerekmektedir.!
+                 */
+                String sql = "delete from ilan where id = "+ilan.getId();
 
-                if (DBUtil.ILAN_LISTESI != null) {
-                    DBUtil.ILAN_LISTESI.remove(ilan);
-                    logYaz("İlan eklendi!", ilan.toString());
-                } else {
-                    logYaz("İlan listesi boş!");
-                }
+                PreparedStatement statement = connection().prepareStatement(sql);
+
+                boolean isRunSuccess = statement.execute();
 
 
             } else if (t instanceof Kullanici) {
 
                 Kullanici kullanici = (Kullanici) t;
-                for (int i = 0; i < DBUtil.KULLANICI_LISTESI.size(); i++) {
-                    if (DBUtil.KULLANICI_LISTESI.get(i).getId().equals(kullanici.getId())) {
-                        DBUtil.KULLANICI_LISTESI.remove(i);
-                        break;
-                    }
-                }
+
+                String sql = "delete from kullanici where id = "+kullanici.getId();
+
+                PreparedStatement preparedStatement = connection().prepareStatement(sql);
+
+                boolean isRunSuccess = preparedStatement.execute();
 
                 logYaz("Kullanıcı silindi!", kullanici.toString());
 
@@ -117,14 +116,11 @@ public abstract class Service<T> extends DBUtil{
 
                 IlanSurec ilanSurec = (IlanSurec) t;
 
-                if (DBUtil.ILAN_SUREC_LISTESI != null) {
-                    for (int i = 0; i < DBUtil.ILAN_SUREC_LISTESI.size(); i++) {
-                        if (DBUtil.ILAN_SUREC_LISTESI.get(i).equals(ilanSurec.getId())) {
-                            DBUtil.ILAN_SUREC_LISTESI.remove(i);
-                        }
-                    }
-                }
+                String sql = "delete from ilan_surec where id = "+ilanSurec.getId();
 
+                PreparedStatement statement = connection().prepareStatement(sql);
+
+                boolean isRunSuccess = statement.execute();
             }
         }
         catch (Exception ex)
