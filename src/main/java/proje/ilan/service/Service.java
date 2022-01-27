@@ -7,6 +7,7 @@ import proje.ilan.model.Surec;
 import proje.ilan.util.DBUtil;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 /*
 Java Generic yapıları
@@ -18,14 +19,15 @@ public abstract class Service<T> extends DBUtil{
     public void ekle(T t)
     {
         try {
-
-
             if (t instanceof Ilan) {
                 Ilan ilan = (Ilan) t;
-                if (DBUtil.ILAN_LISTESI == null)
-                    DBUtil.ILAN_LISTESI = new ArrayList<>();
+                String sql = "insert into ilan(baslik,detay,kategori,kullanici_id) " +
+                        " values('"+ilan.getBaslik()+"','"+ilan.getDetay()+"','"+ilan.getKategori().name()+"'" +
+                        ",'"+ilan.getKullanici().getId()+"')";
 
-                DBUtil.ILAN_LISTESI.add(ilan); // DB BAGLAYACAZ!
+                int row = executeSql(sql);
+
+                // ?? ilan.setId(row);
 
                 if (ilanSurecService == null)
                     ilanSurecService = new IlanSurecService();
@@ -43,28 +45,26 @@ public abstract class Service<T> extends DBUtil{
 
                 Kullanici kullanici = (Kullanici) t;
 
-                if (DBUtil.KULLANICI_LISTESI == null)
-                    DBUtil.KULLANICI_LISTESI = new ArrayList<>();
-
                 String sql = "INSERT INTO kullanici(" +
                         "adi, soyadi, adres)" +
                         "VALUES ('"+ kullanici.getAdi() +"', ' "+ kullanici.getSoyadi() + "', '" + kullanici.getAdres() + "');";
 
-
-                PreparedStatement statement = connection().prepareStatement(sql);
-                int row = statement.executeUpdate();
-
-                DBUtil.KULLANICI_LISTESI.add(kullanici);
+                int row = executeSql(sql);
 
                 logYaz("Kullanıcı eklendi! ID :"+row, kullanici.toString());
 
             } else if (t instanceof IlanSurec) {
-                IlanSurec ilanSurec = (IlanSurec) t;
-                if (DBUtil.ILAN_SUREC_LISTESI == null) {
-                    DBUtil.ILAN_SUREC_LISTESI = new ArrayList<>();
-                }
 
-                DBUtil.ILAN_SUREC_LISTESI.add(ilanSurec);
+                System.out.println("<----- Veritabanın yazılıyor....... ");
+
+                IlanSurec ilanSurec = (IlanSurec) t;
+
+                String sql = "insert into ilan_surec(ilan_id,surec) " +
+                        " values("+ilanSurec.getIlan().getId()+", '"+ilanSurec.getSurec().name()+"')";
+
+                int row = executeSql(sql);
+
+                System.out.println("<------- Veritabanına sürec yazıldı! ------>");
 
                 logYaz("İlan Süreç Bilgi Eklendi!", ilanSurec.toString());
 
@@ -74,6 +74,12 @@ public abstract class Service<T> extends DBUtil{
         {
             System.out.println("Hata -> "+ex.getMessage());
         }
+    }
+
+    private int executeSql(String sql) throws SQLException {
+        PreparedStatement statement = connection().prepareStatement(sql);
+        int row = statement.executeUpdate();
+        return row;
     }
 
     public void sil(T t){
