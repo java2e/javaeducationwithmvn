@@ -4,6 +4,7 @@ import proje.ilan.model.Ilan;
 import proje.ilan.model.Kategori;
 import proje.ilan.model.Kullanici;
 import proje.ilan.service.IlanService;
+import proje.ilan.service.IlanSurecService;
 import proje.ilan.service.KullaniciService;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class TestSql {
 
         for (Ilan ilan1 : ilanList)
             System.out.println(ilan1);
+
+        IlanSurecService ilanSurecService = new IlanSurecService();
+
+        ilanSurecService.surecDegistir(ilanList.get(0));
 
 
 

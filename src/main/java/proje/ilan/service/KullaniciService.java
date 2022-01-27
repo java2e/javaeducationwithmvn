@@ -66,7 +66,7 @@ public class KullaniciService extends Service<Kullanici> implements BaseService<
             }
         }
         catch (Exception ex){
-            System.out.println("Hata => "+ex.getMessage());
+            System.out.println("Hata KullaniciService convertoKullanici => "+ex.getMessage());
         }
 
         return liste;

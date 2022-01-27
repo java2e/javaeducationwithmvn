@@ -70,7 +70,7 @@ public class IlanService extends Service<Ilan> implements BaseService<Ilan>{
         }
         catch (Exception ex){
 
-            logYaz("Hata => ",ex.getMessage());
+            logYaz("Hata IlanService getList => ",ex.getMessage());
 
         }
 

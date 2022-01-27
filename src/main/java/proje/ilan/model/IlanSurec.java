@@ -2,6 +2,17 @@ package proje.ilan.model;
 
 public class IlanSurec extends BaseModel {
 
+
+
+    public IlanSurec(){}
+
+    public IlanSurec(Long id,Ilan ilan,Surec surec)
+    {
+        setId(id);
+        this.ilan = ilan;
+        this.surec = surec;
+    }
+
     private Ilan ilan;
 
     private Surec surec;
