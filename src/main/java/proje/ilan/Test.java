@@ -78,8 +78,8 @@ public class Test {
         List<Kullanici> liste = kullaniciService.getList();
 
 
-        Kullanici kullanici = DBUtil.KULLANICI_LISTESI.get(3);
-        kullaniciService.sil(kullanici);
+        // Kullanici kullanici = DBUtil.KULLANICI_LISTESI.get(3);
+        // kullaniciService.sil(kullanici);
 
         kullaniciService.sil(null);
 

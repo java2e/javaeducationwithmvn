@@ -6,6 +6,7 @@ import proje.ilan.model.Kullanici;
 import proje.ilan.model.Surec;
 import proje.ilan.util.DBUtil;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 /*
 Java Generic yapıları
@@ -16,49 +17,62 @@ public abstract class Service<T> extends DBUtil{
 
     public void ekle(T t)
     {
-        if( t instanceof Ilan) {
-            Ilan ilan = (Ilan) t;
-            if (DBUtil.ILAN_LISTESI == null)
-                DBUtil.ILAN_LISTESI = new ArrayList<>();
-
-            DBUtil.ILAN_LISTESI.add(ilan); // DB BAGLAYACAZ!
-
-            if(ilanSurecService == null)
-                ilanSurecService = new IlanSurecService();
-
-            IlanSurec ilanSurec = new IlanSurec();
-            ilanSurec.setId(1l);
-            ilanSurec.setIlan(ilan);
-            ilanSurec.setSurec(Surec.ONAY_BEKLIYOR);
-
-            ilanSurecService.ekle(ilanSurec);
+        try {
 
 
+            if (t instanceof Ilan) {
+                Ilan ilan = (Ilan) t;
+                if (DBUtil.ILAN_LISTESI == null)
+                    DBUtil.ILAN_LISTESI = new ArrayList<>();
 
-            logYaz("ilan eklendi!", ilan.toString());
-        }
-        else if( t instanceof Kullanici){
+                DBUtil.ILAN_LISTESI.add(ilan); // DB BAGLAYACAZ!
 
-            Kullanici kullanici = (Kullanici) t;
+                if (ilanSurecService == null)
+                    ilanSurecService = new IlanSurecService();
 
-            if(DBUtil.KULLANICI_LISTESI == null)
-                DBUtil.KULLANICI_LISTESI = new ArrayList<>();
+                IlanSurec ilanSurec = new IlanSurec();
+                ilanSurec.setId(1l);
+                ilanSurec.setIlan(ilan);
+                ilanSurec.setSurec(Surec.ONAY_BEKLIYOR);
 
-            DBUtil.KULLANICI_LISTESI .add(kullanici);
+                ilanSurecService.ekle(ilanSurec);
 
-            logYaz("Kullanıcı eklendi!",kullanici.toString());
 
-        }
-        else if(t instanceof IlanSurec) {
-            IlanSurec ilanSurec = (IlanSurec) t;
-            if (DBUtil.ILAN_SUREC_LISTESI == null) {
-                DBUtil.ILAN_SUREC_LISTESI = new ArrayList<>();
+                logYaz("ilan eklendi!", ilan.toString());
+            } else if (t instanceof Kullanici) {
+
+                Kullanici kullanici = (Kullanici) t;
+
+                if (DBUtil.KULLANICI_LISTESI == null)
+                    DBUtil.KULLANICI_LISTESI = new ArrayList<>();
+
+                String sql = "INSERT INTO kullanici(" +
+                        "adi, soyadi, adres)" +
+                        "VALUES ('"+ kullanici.getAdi() +"', ' "+ kullanici.getSoyadi() + "', '" + kullanici.getAdres() + "');";
+
+
+                PreparedStatement statement = connection().prepareStatement(sql);
+                int row = statement.executeUpdate();
+
+                DBUtil.KULLANICI_LISTESI.add(kullanici);
+
+                logYaz("Kullanıcı eklendi! ID :"+row, kullanici.toString());
+
+            } else if (t instanceof IlanSurec) {
+                IlanSurec ilanSurec = (IlanSurec) t;
+                if (DBUtil.ILAN_SUREC_LISTESI == null) {
+                    DBUtil.ILAN_SUREC_LISTESI = new ArrayList<>();
+                }
+
+                DBUtil.ILAN_SUREC_LISTESI.add(ilanSurec);
+
+                logYaz("İlan Süreç Bilgi Eklendi!", ilanSurec.toString());
+
             }
-
-            DBUtil.ILAN_SUREC_LISTESI.add(ilanSurec);
-
-            logYaz("İlan Süreç Bilgi Eklendi!", ilanSurec.toString());
-
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Hata -> "+ex.getMessage());
         }
     }
 
